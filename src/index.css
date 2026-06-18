@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+ /* font-family: "Inter", sans-serif;
+   font-family: "DM Sans", sans-serif;
+ */
+}
+
+:root {
+  --main-color: #0090f0;
+  --p-color: #7b7b7b;
+  --bg-color: #F3F4F6;
+  --white-color: #ffffff;
+  --border-color: #d6d6d5;  
+}
+
+body{
+  background:#fff;
+  font-family: "Inter", sans-serif;
+}
+
+img{
+  max-width:100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+  color:var(--color_heading);
+  font-family: "DM Sans", sans-serif;
+}
+
+span{
+  color:var(--main-color);
+}
+
+p{
+  color:var(--p-color);
+  font-family: "Inter", sans-serif;
+}
+
+input,select,button,textarea{
+  outline:none;
+  border:none;
+}
+
+a{
+  text-decoration:none;
+  color:var(--color_heading)
+}
+.container{
+  width:90%;
+  margin:0 auto;
+  max-width:1350px;
+}
+
+.btn{
+  background:var(--main-color);
+  color:#fff;
+  padding:10px 18px;
+  text-transform:capitalize;
+  border-radius:2px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  transition: 0.3S;
+  width:max-content;
+  border-radius: 30px;
+ 
+}
+.btn:hover{
+  scale:1.05;
+}
