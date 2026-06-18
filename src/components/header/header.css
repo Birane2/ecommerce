@@ -103,3 +103,119 @@ body {
     width: 100%;
   }
 }
+
+/* ===========================
+   BOTTOM HEADER
+=========================== */
+
+.btm_header{
+    background: #0079ca;
+    width: 100%;
+}
+
+.btm_header .container{
+    width: 90%;
+    max-width: 1400px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 55px;
+}
+
+.btm_header .nav{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.btm_header .category_nav{
+    width: 240px;
+    position: relative;
+}
+
+.btm_header .category_btn{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #0066b3;
+    color: white;
+    padding: 0 15px;
+    height: 55px;
+    cursor: pointer;
+}
+
+.btm_header .category_btn p{
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.btm_header .category_btn svg{
+    font-size: 20px;
+}
+
+.btm_header .category_nav_list{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 3px 10px rgba(0,0,0,.15);
+    display: none;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.btm_header .category_nav_list.active{
+    display: flex;
+}
+
+.btm_header .category_nav_list a{
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.btm_header .category_nav_list a:hover{
+    background: #f5f5f5;
+}
+
+.btm_header .nav_links{
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.btm_header .nav_links li{
+    height: 55px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.btm_header .nav_links li a{
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.btm_header .nav_links li.active{
+    background: #005a9e;
+}
+
+.btm_header .sign_regs_icon{
+    display: flex;
+    gap: 20px;
+}
+
+.btm_header .sign_regs_icon a{
+    color: white;
+    font-size: 22px;
+}
+
+.btm_header .sign_regs_icon a:hover{
+    opacity: .8;
+}

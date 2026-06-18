@@ -1,10 +1,11 @@
 import TopHeader from "./components/header/TopHeader";
+import BtmHeader from "./components/header/BtmHeader";
 
 function App() {
   return (
     <>
       <TopHeader />
-      <h1>Mon projet Ecommerce</h1>
+      <BtmHeader />
     </>
   );
 }
