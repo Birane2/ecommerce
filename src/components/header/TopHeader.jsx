@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import React from "react";
->>>>>>> 78f07469dfdda993ec884102e3fca5fabe099a49
 import { Link } from "react-router-dom";
 import { FaSearch, FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
@@ -39,8 +35,4 @@ function TopHeader() {
   );
 }
 
-<<<<<<< HEAD
 export default TopHeader;
-=======
-export default TopHeader;
->>>>>>> 78f07469dfdda993ec884102e3fca5fabe099a49

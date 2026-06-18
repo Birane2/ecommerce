@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import React from "react";
->>>>>>> 78f07469dfdda993ec884102e3fca5fabe099a49
 import { Link } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -71,8 +67,4 @@ function HeroSlider() {
   );
 }
 
-<<<<<<< HEAD
 export default HeroSlider;
-=======
-export default HeroSlider;
->>>>>>> 78f07469dfdda993ec884102e3fca5fabe099a49

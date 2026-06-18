@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
-=======
-import React, { useEffect, useState } from "react";
->>>>>>> 78f07469dfdda993ec884102e3fca5fabe099a49
 import { Link, useLocation } from "react-router-dom";
 import { IoMenu } from "react-icons/io5";
 import { MdOutlineArrowDropDown } from "react-icons/md";
@@ -27,11 +23,7 @@ function BtmHeader() {
     fetch("https://dummyjson.com/products/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data))
-<<<<<<< HEAD
       .catch(() => setCategories([]));
-=======
-      .catch((error) => console.log(error));
->>>>>>> 78f07469dfdda993ec884102e3fca5fabe099a49
   }, []);
 
   return (
@@ -86,8 +78,4 @@ function BtmHeader() {
   );
 }
 
-<<<<<<< HEAD
 export default BtmHeader;
-=======
-export default BtmHeader;
->>>>>>> 78f07469dfdda993ec884102e3fca5fabe099a49
