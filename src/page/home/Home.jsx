@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import HeroSlider from "../../components/HeroSlider";
 import SlideProduct from "../../components/slideProducts/SlideProduct";
@@ -103,3 +104,20 @@ function Home() {
 }
 
 export default Home;
+=======
+import React from "react";
+import HeroSlider from "../../components/HeroSlider";
+import SlideProduct from "../../components/slideProducts/SlideProduct";
+import "./home.css";
+
+function Home() {
+  return (
+    <>
+      <HeroSlider />
+      <SlideProduct />
+    </>
+  );
+}
+
+export default Home;
+>>>>>>> 78f07469dfdda993ec884102e3fca5fabe099a49
