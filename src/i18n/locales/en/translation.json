@@ -10,7 +10,11 @@
     "clearSearch": "Clear search",
     "cart": "Cart",
     "favorites": "Favorites",
-    "language": "Language"
+    "language": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "login": "Sign in",
+    "register": "Create an account"
   },
   "footer": {
     "brandBlurb": "Your trusted online store for tech, accessories and much more, delivered fast all across Mauritania.",

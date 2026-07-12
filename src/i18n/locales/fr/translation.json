@@ -10,7 +10,11 @@
     "clearSearch": "Effacer la recherche",
     "cart": "Panier",
     "favorites": "Favoris",
-    "language": "Langue"
+    "language": "Langue",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "login": "Se connecter",
+    "register": "Créer un compte"
   },
   "footer": {
     "brandBlurb": "Votre boutique en ligne de confiance pour la tech, les accessoires et bien plus encore, livrée rapidement partout en Mauritanie.",

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { IoMenu } from "react-icons/io5";
+import { IoMenu, IoClose } from "react-icons/io5";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { PiSignInBold } from "react-icons/pi";
 import { FaUserPlus } from "react-icons/fa6";
@@ -15,7 +15,16 @@ function BtmHeader() {
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoriesError, setCategoriesError] = useState("");
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [lastPathname, setLastPathname] = useState(location.pathname);
   const categoryNavRef = useRef(null);
+
+  // Referme les menus mobile/catégories à chaque changement de page
+  if (location.pathname !== lastPathname) {
+    setLastPathname(location.pathname);
+    setIsMobileMenuOpen(false);
+    setIsCategoryOpen(false);
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -39,7 +48,8 @@ function BtmHeader() {
     };
   }, [t]);
 
-  // Ferme le menu déroulant au clic extérieur
+  // Ferme le menu déroulant des catégories au clic extérieur (desktop uniquement,
+  // en mobile la liste est affichée en ligne dans le panneau du menu hamburger)
   useEffect(() => {
     if (!isCategoryOpen) return undefined;
 
@@ -58,7 +68,17 @@ function BtmHeader() {
   return (
     <div className="btm_header">
       <div className="container">
-        <nav className="nav">
+        <button
+          type="button"
+          className="hamburger_btn"
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          aria-expanded={isMobileMenuOpen}
+          aria-label={isMobileMenuOpen ? t("nav.closeMenu") : t("nav.openMenu")}
+        >
+          {isMobileMenuOpen ? <IoClose /> : <IoMenu />}
+        </button>
+
+        <nav className={`nav ${isMobileMenuOpen ? "nav_open" : ""}`}>
           <div className="category_nav" ref={categoryNavRef}>
             <div
               className="category_btn"
@@ -117,14 +137,25 @@ function BtmHeader() {
               </li>
             ))}
           </ul>
+
+          <div className="mobile_sign_regs">
+            <Link to="/login">
+              <PiSignInBold />
+              <span>{t("nav.login")}</span>
+            </Link>
+            <Link to="/register">
+              <FaUserPlus />
+              <span>{t("nav.register")}</span>
+            </Link>
+          </div>
         </nav>
 
         <div className="sign_regs_icon">
-          <Link to="/login">
+          <Link to="/login" aria-label={t("nav.login")}>
             <PiSignInBold />
           </Link>
 
-          <Link to="/register">
+          <Link to="/register" aria-label={t("nav.register")}>
             <FaUserPlus />
           </Link>
         </div>
