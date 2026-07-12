@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
-  FaStar,
-  FaRegStar,
   FaRegHeart,
   FaHeart,
   FaMinus,
@@ -16,7 +15,6 @@ import {
   FaChevronRight,
   FaCircleCheck,
   FaCircleXmark,
-  FaStarHalfStroke,
   FaSpinner,
 } from "react-icons/fa6";
 import {
@@ -27,40 +25,19 @@ import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useToast } from "../../context/ToastContext";
 import { formatPrice } from "../../utils/formatPrice";
+import { formatDate } from "../../utils/formatDate";
 import ShareMenu from "../../components/ShareMenu/ShareMenu";
+import StarRating from "../../components/StarRating/StarRating";
 import "./productDetails.css";
 
-const TABS = [
-  { id: "description", label: "Description" },
-  { id: "specs", label: "Caractéristiques" },
-  { id: "reviews", label: "Avis clients" },
+const TAB_IDS = [
+  { id: "description", labelKey: "product.tabDescription" },
+  { id: "specs", labelKey: "product.tabSpecs" },
+  { id: "reviews", labelKey: "product.tabReviews" },
 ];
 
-// Arrondit la note à 0.5 près et retourne 5 icônes (pleine / demie / vide)
-function renderStars(rating = 0) {
-  const rounded = Math.round(rating * 2) / 2;
-  const stars = [];
-
-  for (let i = 1; i <= 5; i += 1) {
-    if (rounded >= i) stars.push(<FaStar key={i} />);
-    else if (rounded + 0.5 === i) stars.push(<FaStarHalfStroke key={i} />);
-    else stars.push(<FaRegStar key={i} />);
-  }
-
-  return stars;
-}
-
-function formatDate(value) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 function ProductDetails() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -74,7 +51,7 @@ function ProductDetails() {
 
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState(TABS[0].id);
+  const [activeTab, setActiveTab] = useState(TAB_IDS[0].id);
   const [zoomStyle, setZoomStyle] = useState(null);
   const [isNew, setIsNew] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -93,7 +70,7 @@ function ProductDetails() {
         setProduct(data);
         setActiveImage(0);
         setQuantity(1);
-        setActiveTab(TABS[0].id);
+        setActiveTab(TAB_IDS[0].id);
 
         const createdAt = data.meta?.createdAt;
         const ageInDays = createdAt
@@ -108,7 +85,7 @@ function ProductDetails() {
         );
       } catch {
         if (isMounted) {
-          setError("Ce produit est introuvable ou une erreur est survenue.");
+          setError(t("product.loadError"));
           setProduct(null);
         }
       } finally {
@@ -122,6 +99,7 @@ function ProductDetails() {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const pricing = useMemo(() => {
@@ -140,10 +118,10 @@ function ProductDetails() {
     return (
       <main className="product_details_page">
         <div className="container state_box state_error">
-          <h2>Produit introuvable</h2>
-          <p>{error || "Ce produit n'existe pas ou a été retiré."}</p>
+          <h2>{t("product.notFoundTitle")}</h2>
+          <p>{error || t("product.notFoundText")}</p>
           <button type="button" className="btn" onClick={() => navigate("/")}>
-            Retour à l&apos;accueil
+            {t("product.backToHome")}
           </button>
         </div>
       </main>
@@ -173,14 +151,14 @@ function ProductDetails() {
     const { addedQuantity, limitedByStock } = addToCart(product, quantity);
 
     if (addedQuantity === 0) {
-      showToast("Stock maximum déjà présent dans votre panier", "error");
+      showToast(t("product.toastMaxStock"), "error");
       return;
     }
 
     showToast(
       limitedByStock
-        ? `Seulement ${addedQuantity} exemplaire(s) ajouté(s) (stock limité)`
-        : `${addedQuantity} × "${product.title}" ajouté au panier`
+        ? t("product.toastLimitedStock", { count: addedQuantity })
+        : t("product.toastAddedToCart", { count: addedQuantity, title: product.title })
     );
   }
 
@@ -189,7 +167,7 @@ function ProductDetails() {
 
     const { addedQuantity } = addToCart(product, quantity);
     if (addedQuantity === 0) {
-      showToast("Stock maximum déjà présent dans votre panier", "error");
+      showToast(t("product.toastMaxStock"), "error");
       return;
     }
 
@@ -198,7 +176,11 @@ function ProductDetails() {
 
   function handleWishlistToggle() {
     const result = toggleWishlist(product);
-    showToast(result === "added" ? "Ajouté aux favoris" : "Retiré des favoris");
+    showToast(
+      result === "added"
+        ? t("product.toastAddedToWishlist")
+        : t("product.toastRemovedFromWishlist")
+    );
   }
 
   function handleZoomMove(event) {
@@ -213,8 +195,8 @@ function ProductDetails() {
   return (
     <main className="product_details_page">
       <div className="container">
-        <nav className="breadcrumb" aria-label="Fil d'Ariane">
-          <Link to="/">Accueil</Link>
+        <nav className="breadcrumb" aria-label={t("product.breadcrumbAria")}>
+          <Link to="/">{t("product.home")}</Link>
           <FaChevronRight />
           <Link to={`/category/${product.category}`}>{categoryLabel}</Link>
           <FaChevronRight />
@@ -224,12 +206,12 @@ function ProductDetails() {
         <section className="product_main">
           <div className="gallery">
             <div className="badges">
-              {isNew && <span className="badge badge_new">Nouveau</span>}
+              {isNew && <span className="badge badge_new">{t("product.badgeNew")}</span>}
               {isPromotion && (
                 <span className="badge badge_promo">-{pricing.discount}%</span>
               )}
               {isOutOfStock && (
-                <span className="badge badge_out">Rupture de stock</span>
+                <span className="badge badge_out">{t("product.outOfStockBadge")}</span>
               )}
             </div>
 
@@ -254,7 +236,10 @@ function ProductDetails() {
                   role="listitem"
                   className={`thumb ${index === activeImage ? "active" : ""}`}
                   onClick={() => setActiveImage(index)}
-                  aria-label={`Voir l'image ${index + 1} de ${product.title}`}
+                  aria-label={t("product.viewImage", {
+                    index: index + 1,
+                    title: product.title,
+                  })}
                   aria-pressed={index === activeImage}
                 >
                   <img src={image} alt="" loading="lazy" />
@@ -268,12 +253,10 @@ function ProductDetails() {
             <h1 className="title">{product.title}</h1>
 
             <div className="rating_row">
-              <span className="stars" aria-hidden="true">
-                {renderStars(product.rating)}
-              </span>
+              <StarRating rating={product.rating} />
               <span className="rating_value">{product.rating?.toFixed(1)}</span>
               <span className="review_count">
-                ({product.reviews?.length || 0} avis)
+                {t("product.reviewsCount", { count: product.reviews?.length || 0 })}
               </span>
             </div>
 
@@ -293,10 +276,10 @@ function ProductDetails() {
               {isOutOfStock ? <FaCircleXmark /> : <FaCircleCheck />}
               <span>
                 {isOutOfStock
-                  ? "Rupture de stock"
+                  ? t("product.outOfStock")
                   : isLowStock
-                  ? `Plus que ${product.stock} en stock !`
-                  : `En stock (${product.stock} disponibles)`}
+                  ? t("product.lowStock", { count: product.stock })
+                  : t("product.inStock", { count: product.stock })}
               </span>
             </div>
 
@@ -308,7 +291,7 @@ function ProductDetails() {
                   type="button"
                   onClick={() => handleQuantityChange(-1)}
                   disabled={isOutOfStock || quantity <= 1}
-                  aria-label="Diminuer la quantité"
+                  aria-label={t("product.decreaseQuantity")}
                 >
                   <FaMinus />
                 </button>
@@ -317,7 +300,7 @@ function ProductDetails() {
                   type="button"
                   onClick={() => handleQuantityChange(1)}
                   disabled={isOutOfStock || quantity >= product.stock}
-                  aria-label="Augmenter la quantité"
+                  aria-label={t("product.increaseQuantity")}
                 >
                   <FaPlus />
                 </button>
@@ -330,7 +313,7 @@ function ProductDetails() {
                 disabled={isOutOfStock || isAdding}
               >
                 {isAdding ? <FaSpinner className="spin_icon" /> : <FaCartShopping />}
-                Ajouter au panier
+                {t("product.addToCart")}
               </button>
 
               <button
@@ -339,7 +322,7 @@ function ProductDetails() {
                 onClick={handleBuyNow}
                 disabled={isOutOfStock}
               >
-                <FaBoltLightning /> Acheter maintenant
+                <FaBoltLightning /> {t("product.buyNow")}
               </button>
             </div>
 
@@ -351,7 +334,7 @@ function ProductDetails() {
                 aria-pressed={isWishlisted(product.id)}
               >
                 {isWishlisted(product.id) ? <FaHeart /> : <FaRegHeart />}
-                Favoris
+                {t("product.favorites")}
               </button>
 
               <ShareMenu title={product.title} text={product.description} />
@@ -360,27 +343,27 @@ function ProductDetails() {
             <div className="trust_badges">
               <div className="trust_item">
                 <FaTruckFast />
-                <span>Livraison rapide</span>
+                <span>{t("product.fastShipping")}</span>
               </div>
               <div className="trust_item">
                 <FaRotateLeft />
-                <span>Retour gratuit</span>
+                <span>{t("product.freeReturns")}</span>
               </div>
               <div className="trust_item">
                 <FaLock />
-                <span>Paiement sécurisé</span>
+                <span>{t("product.securePayment")}</span>
               </div>
               <div className="trust_item">
                 <FaShieldHalved />
-                <span>Garantie incluse</span>
+                <span>{t("product.warranty")}</span>
               </div>
             </div>
           </div>
         </section>
 
         <section className="product_tabs">
-          <div className="tab_list" role="tablist" aria-label="Détails du produit">
-            {TABS.map((tab) => (
+          <div className="tab_list" role="tablist" aria-label={t("product.tabsAria")}>
+            {TAB_IDS.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
@@ -391,7 +374,7 @@ function ProductDetails() {
                 className={`tab_btn ${activeTab === tab.id ? "active" : ""}`}
                 onClick={() => setActiveTab(tab.id)}
               >
-                {tab.label}
+                {t(tab.labelKey)}
               </button>
             ))}
           </div>
@@ -417,23 +400,23 @@ function ProductDetails() {
               <table className="specs_table">
                 <tbody>
                   <tr>
-                    <th>Marque</th>
+                    <th>{t("product.specBrand")}</th>
                     <td>{product.brand || "—"}</td>
                   </tr>
                   <tr>
-                    <th>Catégorie</th>
+                    <th>{t("product.specCategory")}</th>
                     <td>{categoryLabel || "—"}</td>
                   </tr>
                   <tr>
-                    <th>SKU</th>
+                    <th>{t("product.specSku")}</th>
                     <td>{product.sku || "—"}</td>
                   </tr>
                   <tr>
-                    <th>Poids</th>
+                    <th>{t("product.specWeight")}</th>
                     <td>{product.weight ? `${product.weight} g` : "—"}</td>
                   </tr>
                   <tr>
-                    <th>Dimensions</th>
+                    <th>{t("product.specDimensions")}</th>
                     <td>
                       {product.dimensions
                         ? `${product.dimensions.width} × ${product.dimensions.height} × ${product.dimensions.depth} cm`
@@ -441,19 +424,19 @@ function ProductDetails() {
                     </td>
                   </tr>
                   <tr>
-                    <th>Garantie</th>
+                    <th>{t("product.specWarranty")}</th>
                     <td>{product.warrantyInformation || "—"}</td>
                   </tr>
                   <tr>
-                    <th>Livraison</th>
+                    <th>{t("product.specShipping")}</th>
                     <td>{product.shippingInformation || "—"}</td>
                   </tr>
                   <tr>
-                    <th>Politique de retour</th>
+                    <th>{t("product.specReturnPolicy")}</th>
                     <td>{product.returnPolicy || "—"}</td>
                   </tr>
                   <tr>
-                    <th>Quantité minimum</th>
+                    <th>{t("product.specMinQuantity")}</th>
                     <td>{product.minimumOrderQuantity || 1}</td>
                   </tr>
                 </tbody>
@@ -492,16 +475,14 @@ function ProductDetails() {
                             {formatDate(review.date)}
                           </span>
                         </div>
-                        <span className="stars" aria-hidden="true">
-                          {renderStars(review.rating)}
-                        </span>
+                        <StarRating rating={review.rating} />
                         <p className="review_comment">{review.comment}</p>
                       </div>
                     </article>
                   ))}
                 </div>
               ) : (
-                <p>Aucun avis pour ce produit pour le moment.</p>
+                <p>{t("product.noReviews")}</p>
               )}
             </div>
           )}
@@ -509,7 +490,7 @@ function ProductDetails() {
 
         {relatedProducts.length > 0 && (
           <section className="related_products">
-            <h2>Produits similaires</h2>
+            <h2>{t("product.relatedProducts")}</h2>
             <div className="related_grid">
               {relatedProducts.map((item) => (
                 <RelatedProductCard key={item.id} item={item} />
@@ -532,9 +513,7 @@ function RelatedProductCard({ item }) {
         <img src={item.thumbnail} alt={item.title} loading="lazy" />
       </div>
       <h3>{item.title}</h3>
-      <span className="stars" aria-hidden="true">
-        {renderStars(item.rating)}
-      </span>
+      <StarRating rating={item.rating} />
       <p className="related_price">{formatPrice(item.price)}</p>
     </Link>
   );

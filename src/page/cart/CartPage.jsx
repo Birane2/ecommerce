@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { FaMinus, FaPlus, FaTrash, FaCartShopping, FaTruckFast } from "react-icons/fa6";
 import { useCart } from "../../context/CartContext";
 import { useToast } from "../../context/ToastContext";
@@ -6,6 +7,7 @@ import { formatPrice } from "../../utils/formatPrice";
 import "./cart.css";
 
 function CartPage() {
+  const { t } = useTranslation();
   const {
     cartItems,
     incrementItem,
@@ -22,16 +24,16 @@ function CartPage() {
 
   function handleRemove(item) {
     removeFromCart(item.id);
-    showToast(`"${item.title}" retiré du panier`, "info");
+    showToast(t("cart.toastRemoved", { title: item.title }), "info");
   }
 
   function handleClearCart() {
     clearCart();
-    showToast("Panier vidé", "info");
+    showToast(t("cart.toastCleared"), "info");
   }
 
   function handleCheckout() {
-    showToast("Redirection vers le paiement...");
+    showToast(t("cart.toastCheckout"));
   }
 
   if (cartItems.length === 0) {
@@ -39,10 +41,10 @@ function CartPage() {
       <main className="cart_page">
         <div className="container empty_cart">
           <FaCartShopping className="empty_cart_icon" />
-          <h2>Votre panier est vide</h2>
-          <p>Parcourez nos produits et ajoutez vos coups de cœur au panier.</p>
+          <h2>{t("cart.emptyTitle")}</h2>
+          <p>{t("cart.emptyText")}</p>
           <Link to="/" className="btn btn_primary">
-            Continuer mes achats
+            {t("cart.continueShopping")}
           </Link>
         </div>
       </main>
@@ -54,7 +56,7 @@ function CartPage() {
   return (
     <main className="cart_page">
       <div className="container">
-        <h1 className="cart_title">Mon panier ({itemCount})</h1>
+        <h1 className="cart_title">{t("cart.title", { count: itemCount })}</h1>
 
         <div className="cart_layout">
           <div className="cart_items">
@@ -76,7 +78,7 @@ function CartPage() {
                     type="button"
                     onClick={() => decrementItem(item.id)}
                     disabled={item.quantity <= 1}
-                    aria-label={`Diminuer la quantité de ${item.title}`}
+                    aria-label={t("cart.decreaseQuantity", { title: item.title })}
                   >
                     <FaMinus />
                   </button>
@@ -85,7 +87,7 @@ function CartPage() {
                     type="button"
                     onClick={() => incrementItem(item.id)}
                     disabled={item.quantity >= item.stock}
-                    aria-label={`Augmenter la quantité de ${item.title}`}
+                    aria-label={t("cart.increaseQuantity", { title: item.title })}
                   >
                     <FaPlus />
                   </button>
@@ -99,7 +101,7 @@ function CartPage() {
                   type="button"
                   className="cart_item_remove"
                   onClick={() => handleRemove(item)}
-                  aria-label={`Retirer ${item.title} du panier`}
+                  aria-label={t("cart.removeItem", { title: item.title })}
                 >
                   <FaTrash />
                 </button>
@@ -107,45 +109,51 @@ function CartPage() {
             ))}
 
             <button type="button" className="clear_cart_btn" onClick={handleClearCart}>
-              Vider le panier
+              {t("cart.clearCart")}
             </button>
           </div>
 
           <aside className="cart_summary">
-            <h2>Récapitulatif</h2>
+            <h2>{t("cart.summary")}</h2>
 
             <div className="summary_row">
-              <span>Sous-total</span>
+              <span>{t("cart.subtotal")}</span>
               <span>{formatPrice(subtotal)}</span>
             </div>
 
             <div className="summary_row">
-              <span>Livraison</span>
-              <span>{shipping === 0 ? "Gratuite" : formatPrice(shipping)}</span>
+              <span>{t("cart.shipping")}</span>
+              <span>{shipping === 0 ? t("cart.free") : formatPrice(shipping)}</span>
             </div>
 
             {amountLeftForFreeShipping > 0 ? (
               <p className="free_shipping_hint">
-                <FaTruckFast /> Ajoutez {formatPrice(amountLeftForFreeShipping)} pour
-                bénéficier de la livraison gratuite.
+                <FaTruckFast />{" "}
+                {t("cart.freeShippingHint", {
+                  amount: formatPrice(amountLeftForFreeShipping),
+                })}
               </p>
             ) : (
               <p className="free_shipping_hint free_shipping_hint_active">
-                <FaTruckFast /> Livraison gratuite appliquée !
+                <FaTruckFast /> {t("cart.freeShippingActive")}
               </p>
             )}
 
             <div className="summary_row summary_total">
-              <span>Total</span>
+              <span>{t("cart.total")}</span>
               <span>{formatPrice(total)}</span>
             </div>
 
-            <button type="button" className="btn btn_primary checkout_btn" onClick={handleCheckout}>
-              Passer la commande
+            <button
+              type="button"
+              className="btn btn_primary checkout_btn"
+              onClick={handleCheckout}
+            >
+              {t("cart.checkout")}
             </button>
 
             <Link to="/" className="continue_shopping_link">
-              Continuer mes achats
+              {t("cart.continueShopping")}
             </Link>
           </aside>
         </div>

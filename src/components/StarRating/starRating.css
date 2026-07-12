@@ -1,0 +1,6 @@
+.star_rating {
+  display: inline-flex;
+  gap: 2px;
+  color: #f8d941;
+  font-size: 16px;
+}

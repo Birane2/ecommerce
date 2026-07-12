@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FaShareNodes,
   FaLink,
@@ -13,6 +14,7 @@ import "./shareMenu.css";
 // Bouton de partage : Web Share API native si disponible, sinon menu de repli
 // avec copie du lien et partage vers les réseaux sociaux.
 function ShareMenu({ title, text, url, disabled = false }) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
   const { showToast } = useToast();
@@ -47,7 +49,7 @@ function ShareMenu({ title, text, url, disabled = false }) {
         await navigator.share({ title, text, url: shareUrl });
       } catch (error) {
         if (error?.name !== "AbortError") {
-          showToast("Le partage a échoué", "error");
+          showToast(t("share.toastShareError"), "error");
         }
       }
       return;
@@ -59,9 +61,9 @@ function ShareMenu({ title, text, url, disabled = false }) {
   async function copyLink() {
     try {
       await navigator.clipboard.writeText(shareUrl);
-      showToast("Lien copié dans le presse-papiers");
+      showToast(t("share.toastCopied"));
     } catch {
-      showToast("Impossible de copier le lien", "error");
+      showToast(t("share.toastCopyError"), "error");
     }
     setIsOpen(false);
   }
@@ -99,11 +101,11 @@ function ShareMenu({ title, text, url, disabled = false }) {
   }
 
   const options = [
-    { label: "Copier le lien", icon: <FaLink />, action: copyLink },
-    { label: "WhatsApp", icon: <FaWhatsapp />, action: shareOnWhatsApp },
-    { label: "Facebook", icon: <FaFacebook />, action: shareOnFacebook },
-    { label: "X (Twitter)", icon: <FaXTwitter />, action: shareOnX },
-    { label: "E-mail", icon: <FaEnvelope />, action: shareByEmail },
+    { label: t("share.copyLink"), icon: <FaLink />, action: copyLink },
+    { label: t("share.whatsapp"), icon: <FaWhatsapp />, action: shareOnWhatsApp },
+    { label: t("share.facebook"), icon: <FaFacebook />, action: shareOnFacebook },
+    { label: t("share.x"), icon: <FaXTwitter />, action: shareOnX },
+    { label: t("share.email"), icon: <FaEnvelope />, action: shareByEmail },
   ];
 
   return (
@@ -116,7 +118,7 @@ function ShareMenu({ title, text, url, disabled = false }) {
         aria-haspopup="menu"
         aria-expanded={isOpen}
       >
-        <FaShareNodes /> Partager
+        <FaShareNodes /> {t("share.button")}
       </button>
 
       {isOpen && (

@@ -31,10 +31,6 @@ h1,h2,h3,h4,h5,h6{
   font-family: "DM Sans", sans-serif;
 }
 
-span{
-  color:var(--main-color);
-}
-
 p{
   color:var(--p-color);
   font-family: "Inter", sans-serif;

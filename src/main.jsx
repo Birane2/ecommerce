@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import { ToastProvider } from "./context/ToastContext";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
+import "./i18n/i18n";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

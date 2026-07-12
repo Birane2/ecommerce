@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import Product from "./Product";
@@ -7,12 +8,14 @@ import "swiper/css/navigation";
 import "./slideProduct.css";
 
 function SlideProduct({ title, data = [] }) {
+  const { t } = useTranslation();
+
   return (
     <section className="slide_products">
       <div className="container">
         <div className="top_slide">
           <h2>{title}</h2>
-          <p className="subtitle">Add bestselling products to weekly line up</p>
+          <p className="subtitle">{t("home.sectionSubtitle")}</p>
         </div>
 
         <Swiper

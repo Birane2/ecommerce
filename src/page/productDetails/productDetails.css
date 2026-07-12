@@ -178,13 +178,6 @@
   color: var(--pd-text);
 }
 
-.stars {
-  display: inline-flex;
-  gap: 2px;
-  color: #f8d941;
-  font-size: 16px;
-}
-
 .rating_value {
   font-weight: 700;
   color: var(--pd-heading);

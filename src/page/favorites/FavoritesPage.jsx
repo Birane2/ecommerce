@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { useWishlist } from "../../context/WishlistContext";
 import { useToast } from "../../context/ToastContext";
@@ -6,12 +7,13 @@ import { formatPrice } from "../../utils/formatPrice";
 import "./favorites.css";
 
 function FavoritesPage() {
+  const { t } = useTranslation();
   const { wishlistItems, removeFromWishlist } = useWishlist();
   const { showToast } = useToast();
 
   function handleRemove(item) {
     removeFromWishlist(item.id);
-    showToast(`"${item.title}" retiré des favoris`, "info");
+    showToast(t("favorites.toastRemoved", { title: item.title }), "info");
   }
 
   if (wishlistItems.length === 0) {
@@ -19,10 +21,10 @@ function FavoritesPage() {
       <main className="favorites_page">
         <div className="container empty_favorites">
           <FaRegHeart className="empty_favorites_icon" />
-          <h2>Aucun favori pour le moment</h2>
-          <p>Ajoutez des produits à vos favoris pour les retrouver ici.</p>
+          <h2>{t("favorites.emptyTitle")}</h2>
+          <p>{t("favorites.emptyText")}</p>
           <Link to="/" className="btn btn_primary">
-            Découvrir nos produits
+            {t("favorites.discoverProducts")}
           </Link>
         </div>
       </main>
@@ -32,7 +34,9 @@ function FavoritesPage() {
   return (
     <main className="favorites_page">
       <div className="container">
-        <h1 className="favorites_title">Mes favoris ({wishlistItems.length})</h1>
+        <h1 className="favorites_title">
+          {t("favorites.title", { count: wishlistItems.length })}
+        </h1>
 
         <div className="favorites_grid">
           {wishlistItems.map((item) => (
@@ -41,7 +45,7 @@ function FavoritesPage() {
                 type="button"
                 className="favorite_remove"
                 onClick={() => handleRemove(item)}
-                aria-label={`Retirer ${item.title} des favoris`}
+                aria-label={t("favorites.removeItem", { title: item.title })}
               >
                 <FaHeart />
               </button>

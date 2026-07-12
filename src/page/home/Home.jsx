@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import HeroSlider from "../../components/HeroSlider";
 import SlideProduct from "../../components/slideProducts/SlideProduct";
 import {
@@ -12,6 +13,7 @@ import {
 import "./home.css";
 
 function Home() {
+  const { t } = useTranslation();
   const [smartphones, setSmartphones] = useState([]);
   const [mobileAccessories, setMobileAccessories] = useState([]);
   const [laptops, setLaptops] = useState([]);
@@ -55,7 +57,7 @@ function Home() {
         setSportsAccessories(sportsAccessoriesData);
       } catch {
         if (isMounted) {
-          setError("Impossible de charger les produits");
+          setError(t("home.error"));
         }
       } finally {
         if (isMounted) {
@@ -69,13 +71,13 @@ function Home() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [t]);
 
   if (isLoading) {
     return (
       <main>
         <HeroSlider />
-        <div className="products_status">Loading...</div>
+        <div className="products_status">{t("home.loading")}</div>
       </main>
     );
   }
@@ -92,12 +94,18 @@ function Home() {
   return (
     <main>
       <HeroSlider />
-      <SlideProduct title="Smartphones" data={smartphones} />
-      <SlideProduct title="Mobile Accessories" data={mobileAccessories} />
-      <SlideProduct title="Laptops" data={laptops} />
-      <SlideProduct title="Tablets" data={tablets} />
-      <SlideProduct title="Sunglasses" data={sunglasses} />
-      <SlideProduct title="Sports Accessories" data={sportsAccessories} />
+      <SlideProduct title={t("home.sections.smartphones")} data={smartphones} />
+      <SlideProduct
+        title={t("home.sections.mobile-accessories")}
+        data={mobileAccessories}
+      />
+      <SlideProduct title={t("home.sections.laptops")} data={laptops} />
+      <SlideProduct title={t("home.sections.tablets")} data={tablets} />
+      <SlideProduct title={t("home.sections.sunglasses")} data={sunglasses} />
+      <SlideProduct
+        title={t("home.sections.sports-accessories")}
+        data={sportsAccessories}
+      />
     </main>
   );
 }
