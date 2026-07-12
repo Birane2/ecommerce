@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FaCartArrowDown, FaRegHeart, FaShare } from "react-icons/fa";
 import { FaRegStarHalfStroke, FaStar } from "react-icons/fa6";
 import "./slideProduct.css";
@@ -7,11 +8,13 @@ function Product({ item }) {
 
   return (
     <article className="product">
-      <div className="img_product">
-        <img src={item.thumbnail} alt={item.title} />
-      </div>
+      <Link to={`/product/${item.id}`} className="product_link">
+        <div className="img_product">
+          <img src={item.thumbnail} alt={item.title} loading="lazy" />
+        </div>
 
-      <h3 className="name_product">{item.title}</h3>
+        <h3 className="name_product">{item.title}</h3>
+      </Link>
 
       <div className="stars" aria-label="Product rating">
         <FaStar />

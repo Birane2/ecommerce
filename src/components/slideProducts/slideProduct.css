@@ -68,6 +68,10 @@
   transform: translateY(-3px);
 }
 
+.product .product_link {
+  display: block;
+}
+
 .product .img_product {
   height: 180px;
   display: flex;
